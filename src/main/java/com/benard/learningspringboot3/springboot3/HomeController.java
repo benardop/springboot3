@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Controller
 public class HomeController {
 
+    record Video(String name) {}
+
     @GetMapping("/")
     public String index() {
         return "index";
