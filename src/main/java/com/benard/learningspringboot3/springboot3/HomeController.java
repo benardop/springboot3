@@ -3,23 +3,27 @@ package com.benard.learningspringboot3.springboot3;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class HomeController {
 
-    record Video(String name) {}
+    private final VideoService videoService;
 
-    List<Video> videos = List.of(
-            new Video("Need help with your Spring Boot 3"),
-            new Video("Don't do this in your code"),
-            new Video("Secrets to fixing your code"));
+    public HomeController(VideoService videoService) {
+        this.videoService = videoService;
+    }
 
     @GetMapping("/")
     public String index(Model model) {
-        model.addAttribute("videos", videos);
+        model.addAttribute("videos", videoService.getVideos());
         return "index";
+    }
+
+    @PostMapping("/new-video")
+    public String newVideo(@ModelAttribute Video newVideo) {
+        videoService.create(newVideo);
+        return  "redirect:/";
     }
 }
